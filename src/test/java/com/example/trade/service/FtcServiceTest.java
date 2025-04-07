@@ -55,16 +55,4 @@ public class FtcServiceTest {
 
         assertTrue(csvInputStream.available() > 0);
     }
-
-
-
-        // 서비스 로직 실행
-//        InputStream csvInputStream = ftcService.downloadCsvForRegion("some_file.csv");
-//        List<Map<String, String>> result = ftcService.parseCsv(csvInputStream);
-
-        // 검증
-//        assertEquals(2, result.size());
-//        assertEquals("가게A", result.get(0).get("사업자명"));
-//        assertEquals("010-2345-6789", result.get(1).get("전화번호"));
-//    }
 }
