@@ -1,17 +1,20 @@
 package com.example.trade.constant;
 
+import org.springframework.stereotype.Component;
+
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class DistinctMap {
+@Component
+public class DistrictMap {
 
-    private static final DistinctMap INSTANCE = new DistinctMap();
+    private static final DistrictMap INSTANCE = new DistrictMap();
 
     private final Map<City, List<String>> districtMap = new EnumMap<>(City.class);
 
-    private DistinctMap() {
+    private DistrictMap() {
         districtMap.put(City.SEOUL, List.of(
                 "전체", "강남구", "강동구", "강북구", "강서구", "관악구", "광진구", "구로구", "금천구",
                 "노원구", "도봉구", "동대문구", "동작구", "마포구", "서대문구", "서초구", "성동구",
@@ -86,7 +89,7 @@ public class DistinctMap {
         ));
     }
 
-    public static DistinctMap getInstance() {
+    public static DistrictMap getInstance() {
         return INSTANCE;
     }
 
