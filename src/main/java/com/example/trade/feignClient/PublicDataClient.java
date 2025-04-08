@@ -1,2 +1,17 @@
-package com.example.trade.feignClient;public interface publicDataClient {
+package com.example.trade.feignClient;
+
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Map;
+
+@FeignClient(name = "publicDataClient", url = "${external.public-data.url}")
+public interface PublicDataClient {
+    @GetMapping(value = "/MllBsDtl_2Service", produces = "application/json")
+    ResponseEntity<Map<String, Object>> getPublicCorporateData(@RequestParam("serviceKey") String serviceKey,
+                                                               @RequestParam("pageNo") String pageNo,
+                                                               @RequestParam("numOfRows") String numOfRows,
+                                                               @RequestParam("brno") String brno);
 }
