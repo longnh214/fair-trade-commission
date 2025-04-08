@@ -14,7 +14,7 @@ public class CsvFilterService {
 
     public List<FtcDataDto> filterIsCorporate(List<FtcDataDto> dtoList) {
         return dtoList.stream()
-                .filter(dto -> dto.getIsCorporation().equals(corporate))
+                .filter(dto -> dto.getIsCorporate().equals(corporate))
                 .collect(Collectors.toList());
     }
 }

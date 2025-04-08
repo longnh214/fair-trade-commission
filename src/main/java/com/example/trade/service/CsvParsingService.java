@@ -1,51 +1,53 @@
 package com.example.trade.service;
 
 import com.example.trade.dto.FtcDataDto;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
+import com.opencsv.bean.CsvToBean;
+import com.opencsv.bean.CsvToBeanBuilder;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Service
+@Log4j2
 public class CsvParsingService {
-    public List<FtcDataDto> parse(InputStream csvInputStream) throws IOException {
-        try (Reader reader = new InputStreamReader(csvInputStream, StandardCharsets.UTF_8);
-             CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT.withFirstRecordAsHeader())) {
 
-            return StreamSupport.stream(csvParser.spliterator(), false)
-                    .map(this::mapToDto)
-                    .collect(Collectors.toList());
+    public List<FtcDataDto> parse(InputStream csvInputStream) {
+        List<FtcDataDto> resultList = new ArrayList<>();
+
+        try {
+            CsvToBean<FtcDataDto> csvToBean = new CsvToBeanBuilder<FtcDataDto>(
+                    new InputStreamReader(csvInputStream, Charset.forName("EUC-KR")))
+                    .withType(FtcDataDto.class)
+                    .withIgnoreLeadingWhiteSpace(true)
+                    .withIgnoreEmptyLine(true)
+                    .withSeparator(',')
+                    .build();
+
+            Iterator<FtcDataDto> iterator = csvToBean.iterator();
+
+            int rowNum = 1;
+            while (iterator.hasNext()) {
+                try {
+                    FtcDataDto dto = iterator.next();
+                    resultList.add(dto);
+                } catch (Exception e) {
+                    log.warn("{} 번째 행 건너뜀 (파싱 오류): {}", rowNum, e.getMessage());
+                }
+                rowNum++;
+            }
+
+            log.info("최종 파싱된 데이터 건수: {}", resultList.size());
+            return resultList;
+
+        } catch (Exception e) {
+            log.error("CSV 파싱 중 오류 발생: {}", e.getMessage(), e);
+            throw new RuntimeException("CSV 파싱 실패", e);
         }
-    }
-
-    private FtcDataDto mapToDto(CSVRecord record) {
-        return new FtcDataDto(
-                record.get("통신판매번호"),
-                record.get("신고기관명"),
-                record.get("상호"),
-                record.get("사업자등록번호"),
-                record.get("법인여부"),
-                record.get("대표자명"),
-                record.get("전화번호"),
-                record.get("전자우편"),
-                record.get("신고일자"),
-                record.get("사업장소재지"),
-                record.get("사업장소재지(도로명)"),
-                record.get("업소상태"),
-                record.get("신고기관 대표연락처"),
-                record.get("판매방식"),
-                record.get("취급품목"),
-                record.get("인터넷도메인"),
-                record.get("호스트서버소재지")
-        );
     }
 }
