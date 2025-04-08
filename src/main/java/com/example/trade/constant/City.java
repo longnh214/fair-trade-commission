@@ -1,8 +1,12 @@
 package com.example.trade.constant;
 
-import java.util.Arrays;
-import java.util.Optional;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.util.Arrays;
+
+@Schema(description = "시/도")
 public enum City {
     SEOUL("서울특별시"),
     BUSAN("부산광역시"),
@@ -29,13 +33,16 @@ public enum City {
         this.korName = korName;
     }
 
+    @JsonValue
     public String getKorName() {
         return korName;
     }
 
-    public static Optional<City> from(String name) {
+    @JsonCreator
+    public static City from(String name) {
         return Arrays.stream(values())
                 .filter(c -> c.korName.equals(name))
-                .findFirst();
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Unknown city name: " + name));
     }
 }
