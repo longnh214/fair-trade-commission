@@ -1,6 +1,6 @@
 package com.example.trade.dto;
 
-import com.opencsv.bean.CsvBindByName;
+import com.univocity.parsers.annotations.Parsed;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,22 +9,54 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FtcDataDto {
-
-    @CsvBindByName(column = "통신판매번호")
+    @Parsed(field = "통신판매번호")
     private String commSaleNumber;
 
-    @CsvBindByName(column = "상호")
+    @Parsed(field = "신고기관명")
+    private String reportAgency;
+
+    @Parsed(field = "상호")
     private String businessName;
 
-    @CsvBindByName(column = "사업자등록번호")
+    @Parsed(field = "사업자등록번호")
     private String businessNumber;
 
-    @CsvBindByName(column = "법인여부")
+    @Parsed(field = "법인여부")
     private String isCorporate;
 
-    @CsvBindByName(column = "사업장소재지")
+    @Parsed(field = "대표자명")
+    private String ceoName;
+
+    @Parsed(field = "전화번호")
+    private String phone;
+
+    @Parsed(field = "전자우편")
+    private String email;
+
+    @Parsed(field = "신고일자")
+    private String reportDate;
+
+    @Parsed(field = "사업장소재지")
     private String address;
 
-    @CsvBindByName(column = "사업장소재지(도로명)")
+    @Parsed(field = "사업장소재지(도로명)")
     private String roadAddress;
+
+    @Parsed(field = "업소상태")
+    private String businessStatus;
+
+    @Parsed(field = "신고기관 대표연락처")
+    private String agencyPhone;
+
+    @Parsed(field = "판매방식")
+    private String salesMethod;
+
+    @Parsed(field = "취급품목")
+    private String items;
+
+    @Parsed(field = "인터넷도메인")
+    private String domain;
+
+    @Parsed(field = "호스트서버소재지")
+    private String serverLocation;
 }
