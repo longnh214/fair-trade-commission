@@ -5,19 +5,19 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
-import java.util.concurrent.Executor;
+import java.util.concurrent.*;
 
 @Configuration
 public class ThreadPoolConfig implements AsyncConfigurer {
-    @Bean(name = "taskExecutor")
-    public Executor taskExecutor() {
-        int core = Runtime.getRuntime().availableProcessors();
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(core);
-        executor.setMaxPoolSize(core * 2);
-        executor.setQueueCapacity(100);
-        executor.setThreadNamePrefix("Async-");
-        executor.initialize();
-        return executor;
+    @Bean(name = "customExecutor")
+    public ExecutorService customExecutor() {
+        int coreCount = Runtime.getRuntime().availableProcessors();
+        return new ThreadPoolExecutor(
+                coreCount * 2, // corePoolSize
+                coreCount * 4, // maximumPoolSize
+                60L, TimeUnit.SECONDS,
+                new LinkedBlockingQueue<>(10000000), // 큐 크기: 넉넉하게
+                new ThreadPoolExecutor.CallerRunsPolicy() // 거부 시 현재 스레드가 실행
+        );
     }
 }
