@@ -3,8 +3,6 @@ package com.example.trade.service;
 import com.example.trade.feignClient.AddressSearchClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
-import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -22,12 +20,12 @@ public class AddressSearchService {
     private String confmKey;
 
     @Async
-    public CompletableFuture<ResponseEntity<Map<String, Object>>> getAddressDataAsync(String keyword) {
-        ResponseEntity<Map<String, Object>> response = addressSearchClient.getAddressData(confmKey, JSON, keyword);
+    public CompletableFuture<Map<String, Object>> getAddressDataAsync(String keyword) {
+        Map<String, Object> response = addressSearchClient.getAddressData(confmKey, JSON, keyword);
         return CompletableFuture.completedFuture(response);
     }
 
-    public ResponseEntity<Map<String, Object>> getAddressData(String keyword) throws ExecutionException, InterruptedException {
+    public Map<String, Object> getAddressData(String keyword) throws ExecutionException, InterruptedException {
         return getAddressDataAsync(keyword).get();
     }
 }

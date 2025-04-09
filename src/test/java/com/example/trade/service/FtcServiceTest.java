@@ -1,6 +1,8 @@
 package com.example.trade.service;
 
 import com.example.trade.feignClient.FtcClient;
+import feign.Request;
+import feign.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,13 +11,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.ResponseEntity;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
@@ -29,7 +30,9 @@ public class FtcServiceTest {
     @InjectMocks
     private FtcService ftcService;
     private String csvData;
-    private Resource mockResource;
+    private ByteArrayInputStream inputStream;
+    @Mock
+    private Response response;
 
     @BeforeEach
     void setUp() {
@@ -37,8 +40,15 @@ public class FtcServiceTest {
                 "2025-전북장수-0013,전북특별자치도 장수군,엠티엠,487-23-02072,개인,길승재,010-6222-****,kil****@naver.com,20250404,전북특별자치도 장수군 천천면 월곡리 ***-*  ,전북특별자치도 장수군 천천면 박실길 **-*,정상영업,null,인터넷,종합몰,null,null\n" +
                 "2025-전북장수-0012,전북특별자치도 장수군,장수향,475-41-00022,개인,서미나,010-5135-****,bin*****@naver.com,20250403,전북특별자치도 장수군 장수읍 장수리 ***-** 장수시장  ,전북특별자치도 장수군 장수읍 시장로 ** 장수시장,정상영업,null,인터넷,건강/식품,null,null";
 
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(csvData.getBytes(StandardCharsets.UTF_8));
-        mockResource = new InputStreamResource(inputStream);
+        inputStream = new ByteArrayInputStream(csvData.getBytes(StandardCharsets.UTF_8));
+
+        response = Response.builder()
+                .status(200)
+                .reason("OK")
+                .headers(Collections.emptyMap())
+                .body(inputStream, csvData.length())
+                .request(Request.create(Request.HttpMethod.GET, "http://example.com", Collections.emptyMap(), null, Charset.defaultCharset(), null))
+                .build();
     }
 
     @Test
@@ -46,9 +56,9 @@ public class FtcServiceTest {
     void download_success() throws Exception {
         // Mock 설정
         when(ftcService.downloadCsvForRegion("some_file.csv"))
-                .thenReturn(ResponseEntity.ok(mockResource));
+                .thenReturn(response);
 
-        InputStream csvInputStream = ftcService.downloadCsvForRegion("some_file.csv").getBody().getInputStream();
+        InputStream csvInputStream = ftcService.downloadCsvForRegion("some_file.csv").body().asInputStream();
 
         assertTrue(csvInputStream.available() > 0);
     }

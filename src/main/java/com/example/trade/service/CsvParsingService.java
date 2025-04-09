@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -22,7 +22,7 @@ public class CsvParsingService {
 
         try {
             CsvToBean<FtcDataDto> csvToBean = new CsvToBeanBuilder<FtcDataDto>(
-                    new InputStreamReader(csvInputStream, Charset.forName("EUC-KR")))
+                    new InputStreamReader(csvInputStream, StandardCharsets.UTF_8))
                     .withType(FtcDataDto.class)
                     .withIgnoreLeadingWhiteSpace(true)
                     .withIgnoreEmptyLine(true)

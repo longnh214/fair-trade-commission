@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -36,11 +35,7 @@ class CsvFilterServiceTest {
 
         inputStream = new ByteArrayInputStream(csvData.getBytes(StandardCharsets.UTF_8));
 
-        try {
-            dtoList = csvParsingService.parse(inputStream);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        dtoList = csvParsingService.parse(inputStream);
     }
 
     @Test

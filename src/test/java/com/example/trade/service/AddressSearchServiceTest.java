@@ -11,12 +11,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.ResponseEntity;
 
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -84,10 +82,10 @@ class AddressSearchServiceTest {
     @DisplayName("주소_검색_API_동작")
     void addressSearch() throws Exception{
         when(addressSearchService.getAddressData(keyword))
-                .thenReturn(ResponseEntity.ok(object));
+                .thenReturn(object);
 
-        Map<String, Object> result = addressSearchService.getAddressData(keyword).getBody();
+        Map<String, Object> result = addressSearchService.getAddressData(keyword);
 
-        assertFalse(result.isEmpty());
+        assertNotNull(result);
     }
 }

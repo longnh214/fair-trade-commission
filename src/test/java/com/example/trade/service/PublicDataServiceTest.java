@@ -3,6 +3,7 @@ package com.example.trade.service;
 import com.example.trade.feignClient.PublicDataClient;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import feign.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,7 +12,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.ResponseEntity;
 
 import java.util.Map;
 
@@ -30,6 +30,9 @@ class PublicDataServiceTest {
     Map object;
 
     String brno;
+
+    @Mock
+    private Response response;
 
     @BeforeEach
     void setUp() throws JsonProcessingException {
@@ -95,9 +98,9 @@ class PublicDataServiceTest {
     void api_Ok() throws Exception {
         // Mock 설정
         when(publicDataService.getPublicCorporateData(brno))
-                .thenReturn(ResponseEntity.ok(object));
+                .thenReturn(object);
 
-        Map<String, Object> result = publicDataService.getPublicCorporateData(brno).getBody();
+        Map<String, Object> result = publicDataService.getPublicCorporateData(brno);
 
         assertFalse(result.isEmpty());
     }
