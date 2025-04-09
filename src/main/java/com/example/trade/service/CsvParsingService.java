@@ -1,53 +1,54 @@
 package com.example.trade.service;
 
 import com.example.trade.dto.FtcDataDto;
-import com.opencsv.bean.CsvToBean;
-import com.opencsv.bean.CsvToBeanBuilder;
+import com.example.trade.util.CharsetDetectorUtil;
+import com.univocity.parsers.common.processor.BeanListProcessor;
+import com.univocity.parsers.csv.CsvParser;
+import com.univocity.parsers.csv.CsvParserSettings;
+import com.univocity.parsers.csv.UnescapedQuoteHandling;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 @Log4j2
 public class CsvParsingService {
+    private final CharsetDetectorUtil charsetDetectorUtil;
+    
+    public List<FtcDataDto> parseToDto(InputStream csvInputStream) throws IOException {
+        // Bean Processor 준비
+        BeanListProcessor<FtcDataDto> rowProcessor = new BeanListProcessor<>(FtcDataDto.class);
 
-    public List<FtcDataDto> parse(InputStream csvInputStream) {
-        List<FtcDataDto> resultList = new ArrayList<>();
+        byte [] bytes = csvInputStream.readAllBytes();
+        Charset charset = charsetDetectorUtil.detectCharset(new ByteArrayInputStream(bytes), Charset.forName("EUC-KR"));
 
-        try {
-            CsvToBean<FtcDataDto> csvToBean = new CsvToBeanBuilder<FtcDataDto>(
-                    new InputStreamReader(csvInputStream, StandardCharsets.UTF_8))
-                    .withType(FtcDataDto.class)
-                    .withIgnoreLeadingWhiteSpace(true)
-                    .withIgnoreEmptyLine(true)
-                    .withSeparator(',')
-                    .build();
+        // CSV 파서 설정
+        CsvParserSettings settings = new CsvParserSettings();
+        settings.setHeaderExtractionEnabled(true); // 헤더를 DTO 필드에 매핑
+        settings.setProcessor(rowProcessor);
+        settings.setLineSeparatorDetectionEnabled(true);
+        settings.setDelimiterDetectionEnabled(true, ',');
+        settings.setIgnoreLeadingWhitespaces(true);
+        settings.setIgnoreTrailingWhitespaces(true);
+        settings.setMaxCharsPerColumn(10000000);
+        settings.setUnescapedQuoteHandling(UnescapedQuoteHandling.STOP_AT_CLOSING_QUOTE);
+        settings.setSkipEmptyLines(true);
 
-            Iterator<FtcDataDto> iterator = csvToBean.iterator();
+        // 파서 생성
+        CsvParser parser = new CsvParser(settings);
 
-            int rowNum = 1;
-            while (iterator.hasNext()) {
-                try {
-                    FtcDataDto dto = iterator.next();
-                    resultList.add(dto);
-                } catch (Exception e) {
-                    log.warn("{} 번째 행 건너뜀 (파싱 오류): {}", rowNum, e.getMessage());
-                }
-                rowNum++;
-            }
-
-            log.info("최종 파싱된 데이터 건수: {}", resultList.size());
-            return resultList;
-
-        } catch (Exception e) {
-            log.error("CSV 파싱 중 오류 발생: {}", e.getMessage(), e);
-            throw new RuntimeException("CSV 파싱 실패", e);
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(bytes), charset))) {
+            parser.parse(reader);
         }
+
+        return rowProcessor.getBeans();
     }
 }

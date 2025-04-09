@@ -37,7 +37,7 @@ class CsvParsingServiceTest {
     @Test
     @DisplayName("파싱_테스트")
     void parseTest() throws IOException {
-        List<FtcDataDto> ftcDataDtoList = csvParsingService.parse(inputStream);
+        List<FtcDataDto> ftcDataDtoList = csvParsingService.parseToDto(inputStream);
 
         assertFalse(ftcDataDtoList.isEmpty());
     }
