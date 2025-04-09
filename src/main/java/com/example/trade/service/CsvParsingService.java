@@ -12,9 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -22,9 +19,8 @@ import java.util.List;
 @Log4j2
 public class CsvParsingService {
     private final CharsetDetectorUtil charsetDetectorUtil;
-    
+
     public List<FtcDataDto> parseToDto(InputStream csvInputStream) throws IOException {
-        // Bean Processor 준비
         BeanListProcessor<FtcDataDto> rowProcessor = new BeanListProcessor<>(FtcDataDto.class);
 
         byte [] bytes = csvInputStream.readAllBytes();
@@ -32,7 +28,7 @@ public class CsvParsingService {
 
         // CSV 파서 설정
         CsvParserSettings settings = new CsvParserSettings();
-        settings.setHeaderExtractionEnabled(true); // 헤더를 DTO 필드에 매핑
+        settings.setHeaderExtractionEnabled(true);
         settings.setProcessor(rowProcessor);
         settings.setLineSeparatorDetectionEnabled(true);
         settings.setDelimiterDetectionEnabled(true, ',');
