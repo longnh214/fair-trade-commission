@@ -1,6 +1,8 @@
 package com.example.trade.service;
 
+import com.example.trade.exception.APIResponseFormatNotMatchException;
 import com.example.trade.feignClient.AddressSearchClient;
+import feign.codec.DecodeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
@@ -19,9 +21,14 @@ public class AddressSearchService {
     @Value("${external.address.service-key}")
     private String confmKey;
 
-    @Async
+    @Async("customExecutor")
     public CompletableFuture<Map<String, Object>> getAddressDataAsync(String keyword) {
-        Map<String, Object> response = addressSearchClient.getAddressData(confmKey, JSON, keyword);
+        Map<String, Object> response;
+        try{
+            response = addressSearchClient.getAddressData(confmKey, JSON, keyword);
+        }catch(DecodeException e){
+            throw new APIResponseFormatNotMatchException("주소 조회 API 반환 포맷이 JSON이 아닙니다.");
+        }
         return CompletableFuture.completedFuture(response);
     }
 

@@ -19,7 +19,7 @@ public class FtcService {
     @Value("${external.ftc.defaultArgs}")
     private String ftcArgs;
 
-    @Async
+    @Async("customExecutor")
     public CompletableFuture<Response> downloadCsvAsync(String fileName){
         Response response = ftcClient.downloadCsv(ftcArgs, fileName);
         return CompletableFuture.completedFuture(response);
