@@ -44,6 +44,6 @@ public enum City {
         return Arrays.stream(values())
                 .filter(c -> c.korName.equals(name))
                 .findFirst()
-                .orElseThrow(() -> new InvalidCityNameException("Unknown city name: " + name));
+                .orElseThrow(() -> new InvalidCityNameException("해당 시/도 정보는 유효하지 않습니다. -> " + name));
     }
 }
