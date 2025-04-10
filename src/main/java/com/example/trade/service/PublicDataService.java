@@ -22,7 +22,9 @@ public class PublicDataService {
     private String serviceKey;
 
     private static final String ONE = "1";
+    
     private static final String TEN = "10";
+
     private static final String JSON = "json";
 
     @Async("customExecutor")

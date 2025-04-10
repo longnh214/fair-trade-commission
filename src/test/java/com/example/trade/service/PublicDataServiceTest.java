@@ -16,7 +16,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doReturn;
 
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
@@ -36,6 +37,7 @@ class PublicDataServiceTest {
 
     @BeforeEach
     void setUp() throws JsonProcessingException {
+        // given
         String json = "{\n" +
                 "  \"resultCode\": \"00\",\n" +
                 "  \"resultMsg\": \"NORMAL SERVICE\",\n" +
@@ -96,12 +98,12 @@ class PublicDataServiceTest {
     @Test
     @DisplayName("API_통신_성공")
     void api_Ok() throws Exception {
-        // Mock 설정
-        when(publicDataService.getPublicCorporateData(brno))
-                .thenReturn(object);
+        // when
+        doReturn(object).when(publicDataService).getPublicCorporateData(any());
 
         Map<String, Object> result = publicDataService.getPublicCorporateData(brno);
 
+        // then
         assertFalse(result.isEmpty());
     }
 }
