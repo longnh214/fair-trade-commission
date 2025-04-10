@@ -1,7 +1,8 @@
 # fair-trade-commission
 
-### application.yml
+## application.yml
 
+### example
 ```yaml
 spring:
   main:
