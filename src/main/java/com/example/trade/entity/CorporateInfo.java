@@ -1,10 +1,7 @@
 package com.example.trade.entity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +14,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CorporateInfo {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "corporateInfo_seq_gen")
+    @SequenceGenerator(name = "corporateInfo_seq_gen", sequenceName = "corporateInfo_seq", allocationSize = 100)
     private Long id;
 
     @Schema(name = "통신판매번호")
