@@ -1,5 +1,12 @@
 # fair-trade-commission
 
+## Main Dependency Version
+
+- Java 17
+- Spring Boot 3.4.2
+- H2 Database
+- Spring-Cloud-OpenFeign
+
 ## Dependency
 
 ```groovy
