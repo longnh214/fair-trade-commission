@@ -17,7 +17,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-@ExtendWith(MockitoExtension.class)
 @SpringBootTest
 class CsvParsingServiceTest {
     @Autowired

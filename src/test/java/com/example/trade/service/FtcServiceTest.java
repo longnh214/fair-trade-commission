@@ -23,12 +23,11 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 
 @ExtendWith(MockitoExtension.class)
-@SpringBootTest
 public class FtcServiceTest {
 
     @Mock
     private FtcClient ftcClient;
-    @InjectMocks
+    @Mock
     private FtcService ftcService;
     private String csvData;
     private ByteArrayInputStream inputStream;
@@ -58,7 +57,7 @@ public class FtcServiceTest {
 
     @Test
     @DisplayName("CSV_다운로드_성공")
-    void download_success() throws Exception {
+    void downloadSuccess() throws Exception {
         // when
         doReturn(response).when(ftcService).downloadCsv(any());
 

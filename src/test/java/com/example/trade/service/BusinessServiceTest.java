@@ -95,8 +95,8 @@ class BusinessServiceTest {
     }
 
     @Test
-    @DisplayName("비즈니스 로직 통합 테스트 - 비동기 저장 검증")
-    void testBusinessServiceProcess() throws Exception {// CountDownLatch 선언
+    @DisplayName("비즈니스_로직_통합_테스트")
+    void businessProcessTest() throws Exception {// CountDownLatch 선언
         CountDownLatch latch = new CountDownLatch(1);
 
         // mock 설정

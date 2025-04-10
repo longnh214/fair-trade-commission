@@ -17,7 +17,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-@ExtendWith(MockitoExtension.class)
 @SpringBootTest
 class CsvFilterServiceTest {
     @Autowired
@@ -40,8 +39,8 @@ class CsvFilterServiceTest {
     }
 
     @Test
-    @DisplayName("filter_테스트")
-    void filter(){
+    @DisplayName("CSV_필터링_테스트")
+    void filterTest(){
         List<FtcDataDto> filterFtcDataDtoList = csvFilterService.filterIsCorporate(dtoList);
 
         assertFalse(filterFtcDataDtoList.isEmpty());

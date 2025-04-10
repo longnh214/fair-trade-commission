@@ -19,12 +19,11 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 
 @ExtendWith(MockitoExtension.class)
-@SpringBootTest
 class AddressSearchServiceTest {
     @Mock
     AddressSearchClient addressSearchClient;
 
-    @InjectMocks
+    @Mock
     AddressSearchService addressSearchService;
 
     String json;
@@ -81,7 +80,7 @@ class AddressSearchServiceTest {
     }
 
     @Test
-    @DisplayName("주소_검색_API_동작")
+    @DisplayName("주소_검색_API_통신_성공")
     void addressSearch() throws Exception{
         doReturn(object).when(addressSearchService).getAddressData(any());
 

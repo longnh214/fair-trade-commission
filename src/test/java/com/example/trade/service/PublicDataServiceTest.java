@@ -20,12 +20,11 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 
 @ExtendWith(MockitoExtension.class)
-@SpringBootTest
 class PublicDataServiceTest {
     @Mock
     private PublicDataClient publicDataClient;
 
-    @InjectMocks
+    @Mock
     private PublicDataService publicDataService;
 
     Map object;
@@ -96,8 +95,8 @@ class PublicDataServiceTest {
     }
 
     @Test
-    @DisplayName("API_통신_성공")
-    void api_Ok() throws Exception {
+    @DisplayName("법인_등록상세_API_통신_성공")
+    void apiSuccess() throws Exception {
         // when
         doReturn(object).when(publicDataService).getPublicCorporateData(any());
 
