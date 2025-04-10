@@ -15,7 +15,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doReturn;
 
 @ExtendWith(MockitoExtension.class)
 @SpringBootTest
@@ -32,6 +33,7 @@ class AddressSearchServiceTest {
 
     @BeforeEach
     void setUp() throws JsonProcessingException {
+        // given
         keyword = "용구대로2787번길 21-17";
 
         json = "{\n" +
@@ -81,8 +83,7 @@ class AddressSearchServiceTest {
     @Test
     @DisplayName("주소_검색_API_동작")
     void addressSearch() throws Exception{
-        when(addressSearchService.getAddressData(keyword))
-                .thenReturn(object);
+        doReturn(object).when(addressSearchService).getAddressData(any());
 
         Map<String, Object> result = addressSearchService.getAddressData(keyword);
 

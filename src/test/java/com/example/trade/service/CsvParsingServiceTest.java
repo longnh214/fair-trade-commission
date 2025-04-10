@@ -27,6 +27,7 @@ class CsvParsingServiceTest {
 
     @BeforeEach
     void setUp(){
+        // given
         csvData = "통신판매번호,신고기관명,상호,사업자등록번호,법인여부,대표자명,전화번호,전자우편,신고일자,사업장소재지,사업장소재지(도로명),업소상태,신고기관 대표연락처,판매방식,취급품목,인터넷도메인,호스트서버소재지\n" +
                 "2025-전북장수-0013,전북특별자치도 장수군,엠티엠,487-23-02072,개인,길승재,010-6222-****,kil****@naver.com,20250404,전북특별자치도 장수군 천천면 월곡리 ***-*  ,전북특별자치도 장수군 천천면 박실길 **-*,정상영업,null,인터넷,종합몰,null,null\n" +
                 "2025-전북장수-0012,전북특별자치도 장수군,장수향,475-41-00022,법인,서미나,010-5135-****,bin*****@naver.com,20250403,전북특별자치도 장수군 장수읍 장수리 ***-** 장수시장  ,전북특별자치도 장수군 장수읍 시장로 ** 장수시장,정상영업,null,인터넷,건강/식품,null,null";
@@ -35,7 +36,7 @@ class CsvParsingServiceTest {
     }
 
     @Test
-    @DisplayName("파싱_테스트")
+    @DisplayName("CSV_파싱_테스트")
     void parseTest() throws IOException {
         List<FtcDataDto> ftcDataDtoList = csvParsingService.parseToDto(inputStream);
 
