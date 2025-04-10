@@ -5,8 +5,7 @@ import com.example.trade.constant.DistrictMap;
 import com.example.trade.dto.BusinessInputDto;
 import com.example.trade.dto.FtcDataDto;
 import com.example.trade.entity.CorporateInfo;
-import com.example.trade.exception.InvalidBusinessNumberException;
-import com.example.trade.exception.InvalidDistrictException;
+import com.example.trade.exception.*;
 import com.example.trade.repository.CorporateInfoRepository;
 import feign.Response;
 import lombok.RequiredArgsConstructor;
@@ -66,7 +65,7 @@ public class BusinessService {
         downloadFuture
                 .thenApplyAsync(resource -> {
                     if(resource.status() != 200){
-                        throw new RuntimeException("CSV 다운로드 실패");
+                        throw new FileDownloadFailException("CSV 다운로드 실패");
                     }
 
                     try (InputStream inputStream = resource.body().asInputStream()) {
@@ -75,7 +74,7 @@ public class BusinessService {
                         log.info("통신판매사업자 파일 파싱 완료 - 총 행 수: {}", parsedList.size());
                         return parsedList;
                     } catch (Exception e) {
-                        throw new RuntimeException("통신판매사업자 파일 파싱 실패", e);
+                        throw new FileParsingFailException("통신판매사업자 파일 파싱 실패", e);
                     }
                 }, customExecutor)
                 .thenApplyAsync(parsedList -> {
@@ -123,7 +122,7 @@ public class BusinessService {
                     saveBatch(batch);
                     log.info("배치 저장 완료: {} ~ {}", fromIndex, toIndex);
                 } catch (Exception e) {
-                    log.error("배치 저장 중 오류 발생 ({} ~ {}): {}", fromIndex, toIndex, e.getMessage(), e);
+                    log.warn("배치 저장 중 오류 발생 ({} ~ {}): {}", fromIndex, toIndex, e.getMessage(), e);
                 }
             }, executor);
         }
@@ -148,7 +147,7 @@ public class BusinessService {
                             return extractCorporateNumber(response);
                         } catch (Exception e) {
                             log.error("공공데이터에서 법인등록번호 추출 실패 - 번호: {}, 에러: {}", businessNumber, e.getMessage(), e);
-                            throw new RuntimeException("법인등록번호 추출 실패", e);
+                            throw new ExtractInfoFailException("법인등록번호 추출 실패", e);
                         }
                     });
 
@@ -158,7 +157,7 @@ public class BusinessService {
                             return extractDistrictCode(response);
                         } catch (Exception e) {
                             log.error("주소에서 행정동코드 추출 실패 - 주소: {}, 에러: {}", data.getAddress(), e.getMessage(), e);
-                            throw new RuntimeException("행정동코드 추출 실패", e);
+                            throw new ExtractInfoFailException("행정동코드 추출 실패", e);
                         }
                     });
 
