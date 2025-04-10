@@ -18,8 +18,8 @@ public class ThreadPoolConfig implements AsyncConfigurer {
                 coreCount * 2,
                 coreCount * 4,
                 60L, TimeUnit.SECONDS,
-                new LinkedBlockingQueue<>(10000000), // 큐 크기: 넉넉하게
-                new ThreadPoolExecutor.CallerRunsPolicy() // 거부 시 현재 스레드가 실행
+                new LinkedBlockingQueue<>(10000000),
+                new ThreadPoolExecutor.CallerRunsPolicy()
         );
     }
 }

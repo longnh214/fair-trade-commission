@@ -67,7 +67,7 @@ class BusinessServiceTest {
     private Response mockResponse;
 
     @BeforeEach
-    void setUp(){
+    void setUp() throws Exception {
         // given
         input = BusinessInputDto.builder()
                 .city(City.SEOUL)
@@ -92,12 +92,6 @@ class BusinessServiceTest {
                 .body(inputStream, csvData.length())
                 .request(Request.create(Request.HttpMethod.GET, "http://example.com", Collections.emptyMap(), null, Charset.defaultCharset(), null))
                 .build();
-    }
-
-    @Test
-    @DisplayName("비즈니스_로직_통합_테스트")
-    void businessProcessTest() throws Exception {// CountDownLatch 선언
-        CountDownLatch latch = new CountDownLatch(1);
 
         // mock 설정
         doReturn(CompletableFuture.completedFuture(mockResponse)).when(ftcService).downloadCsvAsync(eq("%ED%86%B5%EC%8B%A0%ED%8C%90%EB%A7%A4%EC%82%AC%EC%97%85%EC%9E%90_%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C_%EA%B0%95%EB%82%A8%EA%B5%AC.csv"));
@@ -107,6 +101,12 @@ class BusinessServiceTest {
                 .when(publicDataService).getPublicCorporateDataAsync(any());
         doReturn(CompletableFuture.completedFuture(Map.of("results", Map.of("juso", List.of(Map.of("admCd", "11110101"))))))
                 .when(addressSearchService).getAddressDataAsync(any());
+    }
+
+    @Test
+    @DisplayName("비즈니스_로직_통합_테스트")
+    void businessProcessTest() throws Exception {
+        CountDownLatch latch = new CountDownLatch(1);
 
         // when
         businessService.process(input);
