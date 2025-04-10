@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -19,13 +18,22 @@ public class FtcService {
     @Value("${external.ftc.defaultArgs}")
     private String ftcArgs;
 
+    @Value("${external.ftc.key}")
+    private String key;
+
     @Async("customExecutor")
     public CompletableFuture<Response> downloadCsvAsync(String fileName){
         Response response = ftcClient.downloadCsv(ftcArgs, fileName);
         return CompletableFuture.completedFuture(response);
     }
 
-    public Response downloadCsvForRegion(String fileName) throws IOException, ExecutionException, InterruptedException {
+    @Async("customExecutor")
+    public CompletableFuture<Response> downloadXlsAsync(){
+        Response response = ftcClient.downloadXls(key);
+        return CompletableFuture.completedFuture(response);
+    }
+
+    public Response downloadCsv(String fileName) throws ExecutionException, InterruptedException {
         return downloadCsvAsync(fileName).get();
     }
 }
