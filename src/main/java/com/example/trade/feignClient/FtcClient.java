@@ -10,4 +10,7 @@ public interface FtcClient {
     @GetMapping(value = "/downloadBizComm.do", produces = "text/csv")
     Response downloadCsv(@RequestParam("atchFileUrl") String fileUrl,
                          @RequestParam("atchFileNm") String fileName);
+
+    @GetMapping(value = "/downloadBizOutnatn.do", produces = "text/xls")
+    Response downloadXls(@RequestParam("key") String key);
 }
