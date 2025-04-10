@@ -1,13 +1,12 @@
 package com.example.trade.dto;
 
 import com.univocity.parsers.annotations.Parsed;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
+@Getter
+@Builder
 public class FtcDataDto {
     @Parsed(field = "통신판매번호")
     private String commSaleNumber;
