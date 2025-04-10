@@ -1,5 +1,6 @@
 package com.example.trade.constant;
 
+import com.example.trade.exception.InvalidCityNameException;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -43,6 +44,6 @@ public enum City {
         return Arrays.stream(values())
                 .filter(c -> c.korName.equals(name))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Unknown city name: " + name));
+                .orElseThrow(() -> new InvalidCityNameException("Unknown city name: " + name));
     }
 }
